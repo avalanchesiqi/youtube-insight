@@ -8,5 +8,5 @@ setup(name='youtube_insight',
       author='Siqi Wu',
       author_email='siqi.wu@anu.edu.au',
       url='https://github.com/avalanchesiqi/youtube-insight',
-      install_requires=['google-api-python-client', 'urllib', 'urllib2', 'cookielib', 'xml', 'json', 'argparse']
+      install_requires=['google-api-python-client>=1.6.4']
       )
