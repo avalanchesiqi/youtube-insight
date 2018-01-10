@@ -1,5 +1,6 @@
 # PyCharm project
 .idea
+*.pyc
 
 # MacOS system
 *.DS_Store
