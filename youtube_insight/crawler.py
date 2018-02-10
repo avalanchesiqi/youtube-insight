@@ -21,9 +21,12 @@ class Crawler(BaseCrawler):
                    channelId: ,
                    title: ,
                    description: ,
+                   thumbnails: {},
                    channelTitle: ,
                    categoryId: ,
-                   tags: },
+                   tags: [],
+                   defaultLanguage: ,
+                   defaultAudioLanguage: },
          statistics: {commentCount: ,
                       viewCount: ,
                       favoriteCount: ,
@@ -32,9 +35,9 @@ class Crawler(BaseCrawler):
          topicDetails: {topicIds: ,
                         relevantTopicIds: },
          contentDetails: {duration: ,
-                          dimension: ,
                           definition: ,
                           caption: ,
+                          licensedContent: ,
                           regionRestriction: },
          insights: {startDate: ,
                     days: ,
@@ -70,7 +73,7 @@ class Crawler(BaseCrawler):
                 metadata_json = response['items'][0]
                 return metadata_json
             except Exception as e:
-                print(e)
+                logging.error('--- Exception in metadata crawler:', str(e))
                 time.sleep((2 ** i) + random.random())
         logging.error('--- Metadata crawler failed on video {0}'.format(video_id))
         return None
@@ -88,9 +91,10 @@ class Crawler(BaseCrawler):
             time.sleep(random.uniform(0.1, 1))
             try:
                 response = self.opener.open(url, self.post_data, timeout=2**i)
-                content = response.read()
+                content = response.read().decode('utf-8')
                 break
-            except:
+            except Exception as e:
+                logging.error('--- Exception in historical data crawler:', str(e))
                 continue
 
         try:

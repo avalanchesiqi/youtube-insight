@@ -4,7 +4,6 @@
 Example to illustrate the usage of youtube_insight crawler.
 """
 
-from __future__ import print_function
 import sys, os, argparse, json, logging
 
 from youtube_insight.crawler import Crawler
@@ -38,9 +37,12 @@ if __name__ == '__main__':
     # == == == == == == == == Part 2: Set up crawler == == == == == == == == #
     insight_crawler = Crawler()
     d_key = 'Set your own developer key!'
-    parts = 'snippet,statistics,topicDetails,contentDetails'
-    fields = 'items(id,snippet(publishedAt,channelId,title,description,channelTitle,categoryId,tags),statistics,' \
-             'topicDetails,contentDetails(duration,dimension,definition,caption,regionRestriction))'
+    parts = 'snippet,contentDetails,statistics,topicDetails'
+    fields = 'items(id,' \
+             'snippet(publishedAt,channelId,title,description,thumbnails,channelTitle,categoryId,tags,defaultLanguage,defaultAudioLanguage),' \
+             'contentDetails(duration,definition,caption,licensedContent,regionRestriction),' \
+             'statistics,' \
+             'topicDetails)'
     insight_crawler.set_key(d_key)
     insight_crawler.set_parts(parts)
     insight_crawler.set_fields(fields)
