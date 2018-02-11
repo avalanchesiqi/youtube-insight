@@ -79,6 +79,7 @@ class Crawler(BaseCrawler):
                 return channel_videos
             except Exception as e:
                 logging.error('--- Channel videos crawler failed on channel {0}: {1}'.format(channel_id, str(e)))
+        return []
 
     def crawl_insight_data(self, video_id, relevant=False):
         """ Crawl youtube insight data.
@@ -186,10 +187,10 @@ class Crawler(BaseCrawler):
     def search_relevant_videos(self, video_id, page_token=None):
         """ Call API's search().list method to search the relevant videos.
         """
+        relevant_videos = []
         try:
             response = self.client.search().list(relatedToVideoId=video_id,  part='snippet', type='video',
                                                  order='relevance', maxResults=50, pageToken=page_token).execute()
-            relevant_videos = []
             for res_json in response['items']:
                 # extract relevant video ids
                 relevant_videos.append(res_json['id']['videoId'])
@@ -198,6 +199,6 @@ class Crawler(BaseCrawler):
             if 'nextPageToken' in response:
                 next_page_token = response['nextPageToken']
                 relevant_videos.extend(self.search_relevant_videos(video_id, page_token=next_page_token))
-            return relevant_videos
         except Exception as e:
             logging.error('--- Relevant videos crawler failed on video {0}: {1}'.format(video_id, str(e)))
+        return relevant_videos
