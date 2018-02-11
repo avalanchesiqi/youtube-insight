@@ -5,6 +5,7 @@ It crawls metadata from YouTube V3 API and historical data from web request.
 """
 
 import time, random, logging
+from langdetect import detect
 
 from youtube_insight import BaseCrawler
 
@@ -91,7 +92,7 @@ class Crawler(BaseCrawler):
                    channelTitle: ,
                    categoryId: ,
                    tags: [],
-                   defaultLanguage: ,
+                   defaultLanguage/detectLanguage: ,
                    defaultAudioLanguage: },
          statistics: {viewCount: ,
                       commentCount: ,
@@ -144,6 +145,12 @@ class Crawler(BaseCrawler):
                 res_json = response['items'][0]
                 # remove the unnecessary part in thumbnail
                 res_json['snippet']['thumbnails'] = res_json['snippet']['thumbnails']['default']['url']
+                # use langdetect if defaultLanguage not available
+                if 'defaultLanguage' not in res_json['snippet']:
+                    try:
+                        res_json['snippet']['detectLanguage'] = detect(res_json['snippet']['title'] + res_json['snippet']['description'])
+                    except Exception:
+                        pass
                 return res_json
             except Exception as e:
                 logging.error('--- Exception in metadata crawler:', str(e))
