@@ -13,7 +13,7 @@ class Crawler(BaseCrawler):
     def __init__(self):
         super(Crawler, self).__init__()
 
-    def crawl_insight_data(self, video_id):
+    def crawl_insight_data(self, video_id, relevant=False):
         """ Crawl youtube insight data.
         It returns a json object with fields set as self.fields, an example would be
         {id: ,
@@ -48,7 +48,8 @@ class Crawler(BaseCrawler):
                     dailyWatch: ,
                     avgWatch: ,
                     dailySubscriber: ,
-                    totalSubscriber: }
+                    totalSubscriber: },
+        relevantVideos: [vid1, vid2, ...]
         }
 
         note:
@@ -60,6 +61,10 @@ class Crawler(BaseCrawler):
             historical_json = self.crawl_historical_data(video_id)
             if historical_json is not None:
                 insight_json.update({'insights': historical_json})
+            if relevant:
+                relevant_json = self.search_relevant_videos(video_id)
+                if len(relevant_json) > 0:
+                    insight_json.update({'relevantVideos': relevant_json})
             return insight_json
         return None
 
@@ -102,3 +107,22 @@ class Crawler(BaseCrawler):
             return historical_json
         except:
             return None
+
+    def search_relevant_videos(self, video_id, page_token=None):
+        """Find the relevant videos.
+        """
+        try:
+            response = self.client.search().list(relatedToVideoId=video_id,  part='snippet', type='video',
+                                                 order='relevance', maxResults=50, pageToken=page_token).execute()
+            relevant_videos = []
+            for metadata_json in response['items']:
+                # extract relevant video ids
+                relevant_videos.append(metadata_json['id']['videoId'])
+
+            # recursively request next page
+            if 'nextPageToken' in response:
+                next_page_token = response['nextPageToken']
+                relevant_videos.extend(self.search_relevant_videos(video_id, page_token=next_page_token))
+            return relevant_videos
+        except Exception as e:
+            logging.error('--- Relevant videos crawler failed on video {0}: {1}'.format(video_id, str(e)))

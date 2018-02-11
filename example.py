@@ -15,7 +15,9 @@ if __name__ == '__main__':
     parser.add_argument('-i', '--input', help='input file path of video ids', required=True)
     parser.add_argument('-o', '--output', help='output file path of video data', required=True)
     parser.add_argument('-f', dest='force', action='store_true', default=False)
+    parser.add_argument('-r', '--relevant',  dest='relevant', action='store_true', default=False)
     parser.set_defaults(force=False)
+    parser.set_defaults(relevant=False)
     args = parser.parse_args()
 
     input_path = args.input
@@ -52,7 +54,7 @@ if __name__ == '__main__':
     with open(input_path, 'r') as input_data:
         for vid in input_data:
             vid = vid.rstrip()
-            video_data = insight_crawler.crawl_insight_data(vid)
+            video_data = insight_crawler.crawl_insight_data(vid, args.relevant)
             if video_data is not None:
                 output_data.write('{0}\n'.format(json.dumps(video_data)))
                 logging.info('--- Insight data crawler succeeded on video {0}'.format(vid))
