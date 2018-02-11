@@ -76,6 +76,8 @@ class Crawler(BaseCrawler):
             try:
                 response = self.client.videos().list(id=video_id, part=self.parts, fields=self.fields).execute()
                 metadata_json = response['items'][0]
+                # remove the unnecessary part in thumbnail
+                metadata_json['snippet']['thumbnails'] = metadata_json['snippet']['thumbnails']['default']['url']
                 return metadata_json
             except Exception as e:
                 logging.error('--- Exception in metadata crawler:', str(e))
