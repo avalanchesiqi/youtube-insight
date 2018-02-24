@@ -112,12 +112,12 @@ class BaseCrawler(object):
         json_return['dailyView'] = daily_view
 
         # get start date
-        start_date = datetime.date(1970, 1, 1) + datetime.timedelta(json_data['day']['data'][0] / 86400000)
-        start_date = start_date.strftime("%Y-%m-%d")
+        start_date = datetime.datetime.fromtimestamp(json_data['day']['data'][0]/1000.0)
+        start_date = start_date.strftime('%Y-%m-%d')
         json_return['startDate'] = start_date
 
         # get days with stats
-        days = [(d - json_data['day']['data'][0]) // 86400000 for d in json_data['day']['data']]
+        days = [round((d - json_data['day']['data'][0]) / 86400000) for d in json_data['day']['data']]
         json_return['days'] = days
 
         # get total views
