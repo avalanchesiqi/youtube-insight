@@ -21,7 +21,7 @@ class Crawler(BaseCrawler):
          snippet: {publishedAt: ,
                    description: ,
                    thumbnails: ,
-                   channelTitle: },
+                   title: },
          statistics: {viewCount: ,
                       commentCount: ,
                       subscriberCount: ,
@@ -48,9 +48,9 @@ class Crawler(BaseCrawler):
                 res_json = response['items'][0]
                 channel_json = {'channelId': res_json['id'],
                                 'snippet': {'publishedAt': res_json['snippet']['publishedAt'],
-                                            'description': res_json['snippet']['publishedAt'],
+                                            'description': res_json['snippet']['description'],
                                             'thumbnails': res_json['snippet']['thumbnails']['default']['url'],
-                                            'channelTitle': res_json['snippet']['title']},
+                                            'title': res_json['snippet']['title']},
                                 'statistics': res_json['statistics']}
                 return channel_json
             except Exception as e:
