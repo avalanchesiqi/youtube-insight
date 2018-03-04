@@ -62,6 +62,7 @@ if __name__ == '__main__':
     input_path = args.input
     output_path = args.output
     verbose = args.verbose
+    logging.basicConfig(filename='./video_recency_availability.log', level=logging.DEBUG)
 
     # == == == == == == == == Part 2: Verify candidate channel ids == == == == == == == == #
     output_data = open(output_path, 'w', buffering=0)
