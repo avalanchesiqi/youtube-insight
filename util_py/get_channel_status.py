@@ -56,7 +56,7 @@ if __name__ == '__main__':
     logging.basicConfig(filename='./channel_status.log', level=logging.DEBUG)
 
     # == == == == == == == == Part 2: Verify candidate channel ids == == == == == == == == #
-    output_data = open(output_path, 'w', buffering=0)
+    output_data = open(output_path, 'w')
     # verify YouTube channel badge
     start_query(input_path, output_data, verbose)
     output_data.close()

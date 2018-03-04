@@ -68,8 +68,8 @@ if __name__ == '__main__':
     verbose = args.verbose
     logging.basicConfig(filename='./video_recency_availability.log', level=logging.DEBUG)
 
-    # == == == == == == == == Part 2: Verify candidate channel ids == == == == == == == == #
-    output_data = open(output_path, 'w', buffering=0)
+    # == == == == == == == == Part 2: Get recent and statistics available video ids == == == == == == == == #
+    output_data = open(output_path, 'w')
     # get availability of YouTube videos
     start_query(input_path, output_data, verbose)
     output_data.close()
