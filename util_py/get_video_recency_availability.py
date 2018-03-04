@@ -17,7 +17,7 @@ def is_recent_available(video_id):
         if not (d and d.text):
             return False
         # filter 1 on recency: must publish after 2017
-        if datetime.strptime(d.text[13:], '%b %d, %Y') > datetime.strptime('Dec 31, 2016', '%b %d, %Y'):
+        if datetime.strptime(d.text.split('on ')[1], '%b %d, %Y') > datetime.strptime('Dec 31, 2016', '%b %d, %Y'):
             for s in soup.find_all('span', {'class': 'yt-ui-menu-item-label'}):
                 if not (s and s.string):
                     continue
@@ -38,6 +38,8 @@ def test_recent_available():
     assert is_recent_available('YQHsXMglC9A') is False
     # a non-recent and statistics unavailable video: Road Bike Party 2 - Martyn Ashton
     assert is_recent_available('HhabgvIIXik') is False
+    # a recent and statistics available streamed video: 24/7 Online KPOP IDOL Channel [ALL THE KPOP]
+    assert is_recent_available('qGNyfwrjV0c') is True
 
 
 def start_query(input_path, output_data, verbose=False):
