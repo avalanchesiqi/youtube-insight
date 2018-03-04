@@ -14,6 +14,8 @@ def is_recent_available(video_id):
         r = requests.get(video_page)
         soup = BeautifulSoup(r.text, 'lxml')
         d = soup.find('div', {'id': 'watch-uploader-info'})
+        if not (d and d.text):
+            return False
         # filter 1 on recency: must publish after 2017
         if datetime.strptime(d.text[13:], '%b %d, %Y') > datetime.strptime('Dec 31, 2016', '%b %d, %Y'):
             for s in soup.find_all('span', {'class': 'yt-ui-menu-item-label'}):
