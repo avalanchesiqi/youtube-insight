@@ -18,7 +18,7 @@ def is_verified(channel_id):
             if 'support.google.com/youtube/answer/3046484?hl=en' in url:
                 return True
     except Exception as e:
-        logging.ERROR('{0} with msg {1}'.format(channel_id, str(e)))
+        logging.exception('{0} with msg {1}'.format(channel_id, str(e)))
     return False
 
 

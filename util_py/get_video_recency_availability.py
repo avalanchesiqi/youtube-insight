@@ -25,7 +25,7 @@ def is_recent_available(video_id):
                 if s.string == 'Statistics':
                     return True
     except Exception as e:
-        logging.ERROR('{0} with msg {1}'.format(video_id, str(e)))
+        logging.exception('{0} with msg {1}'.format(video_id, str(e)))
     return False
 
 
