@@ -40,6 +40,8 @@ def test_recent_available():
     assert is_recent_available('HhabgvIIXik') is False
     # a recent and statistics available streamed video: 24/7 Online KPOP IDOL Channel [ALL THE KPOP]
     assert is_recent_available('qGNyfwrjV0c') is True
+    # a recent, statistics available and scheduled video: SEO Dominance Global
+    assert is_recent_available('bb8X46CDt9I') is True
 
 
 def start_query(input_path, output_data, verbose=False):
