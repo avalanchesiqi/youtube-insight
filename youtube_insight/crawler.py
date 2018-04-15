@@ -100,6 +100,6 @@ class Crawler(BaseCrawler):
             return None
 
     def crawl_playlist_items(self, channelId):
-        """ Call API's playlists().list method to list videos in a playlist.
+        """ Call API's playlists().list method to playlists.
         """
         return self.client.playlists().list(channelId=channelId, part=self.parts, maxResults=self.maxResults).execute()
