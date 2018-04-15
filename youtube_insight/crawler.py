@@ -99,7 +99,7 @@ class Crawler(BaseCrawler):
         except:
             return None
 
-    def crawl_playlist_items(self, channelId):
+    def crawl_playlist(self, channelId):
         """ Call API's playlists().list method to playlists.
         """
         return self.client.playlists().list(channelId=channelId, part=self.parts, maxResults=self.maxResults).execute()
