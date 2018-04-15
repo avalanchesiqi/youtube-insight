@@ -3,11 +3,10 @@
 This is the base class of youtube_insight crawler.
 It sets up a client to interact with API and an opener to send request from.
 """
-
-import time, datetime, random, json, re, urllib
-from http.cookiejar import CookieJar
-from googleapiclient import discovery
-# from apiclient import discovery
+from __future__ import division, print_function
+import re, time, random, json, datetime
+import urllib, urllib2, cookielib
+from apiclient import discovery
 from xml.etree import ElementTree
 
 # YouTube API service and version
@@ -21,7 +20,8 @@ class BaseCrawler(object):
         self.parts = None
         self.fields = None
         self.client = None
-        self.opener = urllib.request.build_opener()
+        self.maxResults = 25
+        self.opener = urllib2.build_opener()
         self.cookie, self.session_token = self._get_cookie_and_sessiontoken()
         self.post_data = self.get_post_data(self.session_token)
 
@@ -30,8 +30,7 @@ class BaseCrawler(object):
         """ Set developer key.
         """
         self.key = key
-        self.client = discovery.build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-                                      developerKey=self.key, cache_discovery=False)
+        self.client = discovery.build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=self.key)
 
     def set_parts(self, parts):
         """ Set target video parts.
@@ -43,15 +42,20 @@ class BaseCrawler(object):
         """
         self.fields = fields
 
+    def set_maxResults(self, maxResults):
+        """ Set Max results.
+        """
+        self.maxResults = maxResults
+
     # == == == == == == == == methods to construct historical data opener == == == == == == == == #
     @staticmethod
     def _get_cookie_and_sessiontoken():
         """ Get cookie and sessiontoken.
         """
-        cj = CookieJar()
-        opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj), urllib.request.HTTPHandler())
-        req = urllib.request.Request('https://www.youtube.com/watch?v=' + 'rYEDA3JcQqw')
-        src = opener.open(req).read().decode('utf-8')
+        cj = cookielib.CookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj), urllib2.HTTPHandler())
+        req = urllib2.Request('https://www.youtube.com/watch?v=' + 'rYEDA3JcQqw')
+        src = opener.open(req).read()
 
         time.sleep(random.random())
 
@@ -70,7 +74,7 @@ class BaseCrawler(object):
     def get_post_data(session_token):
         """ Get the session token.
         """
-        return urllib.parse.urlencode({'session_token': session_token}).encode('utf-8')
+        return urllib.urlencode({'session_token': session_token})
 
     @staticmethod
     def get_url(vid):
@@ -112,12 +116,12 @@ class BaseCrawler(object):
         json_return['dailyView'] = daily_view
 
         # get start date
-        start_date = datetime.datetime.fromtimestamp(json_data['day']['data'][0]/1000.0)
-        start_date = start_date.strftime('%Y-%m-%d')
+        start_date = datetime.date(1970, 1, 1) + datetime.timedelta(json_data['day']['data'][0] / 86400000)
+        start_date = start_date.strftime("%Y-%m-%d")
         json_return['startDate'] = start_date
 
         # get days with stats
-        days = [round((d - json_data['day']['data'][0]) / 86400000) for d in json_data['day']['data']]
+        days = [(d - json_data['day']['data'][0]) // 86400000 for d in json_data['day']['data']]
         json_return['days'] = days
 
         # get total views
@@ -125,7 +129,7 @@ class BaseCrawler(object):
         json_return['totalView'] = total_view
 
         # try parse daily share count and get total shares
-        if 'shares' in json_data:
+        if 'share' in json_data:
             daily_share = json_data['shares']['daily']['data']
             total_share = sum(daily_share)
             json_return['dailyShare'] = daily_share
