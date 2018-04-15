@@ -103,3 +103,8 @@ class Crawler(BaseCrawler):
         """ Call API's playlists().list method to playlists.
         """
         return self.client.playlists().list(channelId=channelId, part=self.parts, maxResults=self.maxResults).execute()
+
+    def crawl_playlist_items(self, playlistId):
+        """ Call API's playlistItems().list method to playlists.
+        """
+        return self.client.playlistItems().list(playlistId=playlistId, part=self.parts, maxResults=self.maxResults).execute()
