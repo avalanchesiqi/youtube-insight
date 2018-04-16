@@ -1,8 +1,7 @@
-
 # YouTube-insight
 
 ## An integrated YouTube data crawler
-YouTube-insight is a tool to crawl video metadata and historical data for YouTube videos, and first introduced in the following paper,
+YouTube-insight is a tool to crawl video metadata and historical data for YouTube videos, and first used to construct datasets in the following paper,
 > Siqi Wu, [Marian-Andrei Rizoiu](http://www.rizoiu.eu/), and [Lexing Xie](http://users.cecs.anu.edu.au/~xlx/). Beyond Views: Measuring and Predicting Engagement in Online Videos. *AAAI International Conference on Weblogs and Social Media (ICWSM)*, 2018. \[ [paper](https://avalanchesiqi.github.io/files/icwsm2018engagement.pdf) | [code](https://github.com/avalanchesiqi/youtube-engagement) | [data](https://drive.google.com/drive/folders/1wZwDIR18IHPPTiH1C0dyBbGPR-3MktI7?usp=sharing) \]
 
 ### Python packages version
@@ -10,6 +9,7 @@ All codes are developed and tested in Python 3.6, along with google-api-python-c
 
 ## Code usage
 An simple example is given below:
+
 ```python
 import json
 from youtube_insight.crawler import Crawler
@@ -24,9 +24,11 @@ vid = 'ITtlxjvLQis'
 video_data = insight_crawler.crawl_insight_data(vid)
 print(json.dumps(video_data, indent=4, sort_keys=True))
 ```
+
 Before using this YouTube-insight crawler, you need to [register your Google developer key](https://developers.google.com/youtube/v3/getting-started) and set it in the `d_key` field.
 
-We also provide an easy-to-use script that handles input and output from text files in [example.py](/example.py).
+We also provide a quickstart script that handles input and output from text files in [example.py](/example.py).
+It's so easy to use -- you provide an input file then we take care of everything!
 The two main functions you can utilize directly are:
 1. Given a list of YouTube channel ID, crawl all video IDs.
 2. Given a list of YouTube video ID, crawl all video insight data.
@@ -113,6 +115,6 @@ Each line is a YouTube video in `json` format, an example is shown below, in whi
 }
 ```
 
-### defaultLanguage/detectLanguage: field
+### defaultLanguage/detectLanguage field
 Some videos have `defaultLanguage` returned by YouTube API, but some don't.
-If not, we use [langdetect 1.0.7](https://pypi.python.org/pypi/langdetect?) to estimate a language `detectLang` from video title and description.
+If not, we use [langdetect 1.0.7](https://pypi.python.org/pypi/langdetect?) to detect a language from video title and description.
