@@ -43,6 +43,7 @@ Some argparse options:
 ### Given a list of YouTube channel ID, crawl all video IDs
 Code usage:
 `python example.py -i data/channel_ids.txt -o data/channel_videos.json -c`
+
 Each line is the information of a YouTube channel in `json` format, an example is shown below, in which the `channelVideos` field lists all video IDs from requested channel.
 ```json
 {
@@ -67,6 +68,7 @@ Each line is the information of a YouTube channel in `json` format, an example i
 ### Given a list of YouTube video ID, crawl all video insight data
 Code usage:
 `python example.py -i data/video_ids.txt -o data/video_insights.json -r`
+
 Each line is a YouTube video in `json` format, an example is shown below, in which the `relevantVideos` field lists all relevant video IDs returned by YouTube API.
 ```json
 {
