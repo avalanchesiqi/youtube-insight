@@ -4,6 +4,14 @@
 YouTube-insight is a tool to crawl video metadata and historical data for YouTube videos, and first used to construct datasets in the following paper,
 > Siqi Wu, [Marian-Andrei Rizoiu](http://www.rizoiu.eu/), and [Lexing Xie](http://users.cecs.anu.edu.au/~xlx/). Beyond Views: Measuring and Predicting Engagement in Online Videos. *AAAI International Conference on Weblogs and Social Media (ICWSM)*, 2018. \[ [paper](https://avalanchesiqi.github.io/files/icwsm2018engagement.pdf) | [code](https://github.com/avalanchesiqi/youtube-engagement) | [data](https://drive.google.com/drive/folders/1wZwDIR18IHPPTiH1C0dyBbGPR-3MktI7?usp=sharing) \]
 
+## Installation
+Install from source, run
+```bash
+git clone https://github.com/avalanchesiqi/youtube-insight.git
+cd youtube-insight
+python setup.py install
+```
+
 ### Python packages version
 All codes are developed and tested in Python 3.6, along with google-api-python-client 1.6.5, urllib3 1.22 and langdetect 1.0.7.
 
@@ -41,8 +49,11 @@ Some argparse options:
 * '-f' / '--force': overwrite output path or not, default=False
 
 ### Given a list of YouTube channel ID, crawl all video IDs
-Code usage:
-`python example.py -i data/channel_ids.txt -o data/channel_videos.json -c`
+Code usage
+```bash
+python example.py -i data/channel_ids.txt -o data/channel_videos.json -c
+```
+
 Each line is the information of a YouTube channel in `json` format, an example is shown below, in which the `channelVideos` field lists all video IDs from requested channel.
 ```json
 {
@@ -65,8 +76,11 @@ Each line is the information of a YouTube channel in `json` format, an example i
 ```
 
 ### Given a list of YouTube video ID, crawl all video insight data
-Code usage:
-`python example.py -i data/video_ids.txt -o data/video_insights.json -r`
+Code usage
+```bash
+python example.py -i data/video_ids.txt -o data/video_insights.json -r
+```
+
 Each line is a YouTube video in `json` format, an example is shown below, in which the `relevantVideos` field lists all relevant video IDs returned by YouTube API.
 ```json
 {
