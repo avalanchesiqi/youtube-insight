@@ -45,14 +45,15 @@ class Crawler(BaseCrawler):
         for i in range(0, 3):
             try:
                 response = self.client.channels().list(id=channel_id, part='snippet, statistics').execute()
-                res_json = response['items'][0]
-                channel_json = {'channelId': res_json['id'],
-                                'snippet': {'publishedAt': res_json['snippet']['publishedAt'],
-                                            'description': res_json['snippet']['description'],
-                                            'thumbnails': res_json['snippet']['thumbnails']['default']['url'],
-                                            'title': res_json['snippet']['title']},
-                                'statistics': res_json['statistics']}
-                return channel_json
+                if response is not None and isinstance(response['items'], list) and len(response['items']) > 0:
+                    res_json = response['items'][0]
+                    channel_json = {'channelId': res_json['id'],
+                                    'snippet': {'publishedAt': res_json['snippet']['publishedAt'],
+                                                'description': res_json['snippet']['description'],
+                                                'thumbnails': res_json['snippet']['thumbnails']['default']['url'],
+                                                'title': res_json['snippet']['title']},
+                                    'statistics': res_json['statistics']}
+                    return channel_json
             except Exception as e:
                 logging.error('--- Exception in channel statistics crawler:', str(e))
                 time.sleep((2 ** i) + random.random())
@@ -67,16 +68,17 @@ class Crawler(BaseCrawler):
             try:
                 response = self.client.search().list(channelId=channel_id, part='snippet', type='video',
                                                      order='date', maxResults=50, pageToken=page_token).execute()
-                channel_videos = []
-                for res_json in response['items']:
-                    # extract channel video ids
-                    channel_videos.append(res_json['id']['videoId'])
+                if response is not None and isinstance(response['items'], list) and len(response['items']) > 0:
+                    channel_videos = []
+                    for res_json in response['items']:
+                        # extract channel video ids
+                        channel_videos.append(res_json['id']['videoId'])
 
-                # recursively request next page
-                if 'nextPageToken' in response:
-                    next_page_token = response['nextPageToken']
-                    channel_videos.extend(self.list_channel_videos(channel_id, page_token=next_page_token))
-                return channel_videos
+                    # recursively request next page
+                    if 'nextPageToken' in response:
+                        next_page_token = response['nextPageToken']
+                        channel_videos.extend(self.list_channel_videos(channel_id, page_token=next_page_token))
+                    return channel_videos
             except Exception as e:
                 logging.error('--- Channel videos crawler failed on channel {0}: {1}'.format(channel_id, str(e)))
         return []
@@ -143,16 +145,17 @@ class Crawler(BaseCrawler):
         for i in range(0, 3):
             try:
                 response = self.client.videos().list(id=video_id, part=self.parts, fields=self.fields).execute()
-                res_json = response['items'][0]
-                # remove the unnecessary part in thumbnail
-                res_json['snippet']['thumbnails'] = res_json['snippet']['thumbnails']['default']['url']
-                # use langdetect if defaultLanguage not available
-                if 'defaultLanguage' not in res_json['snippet']:
-                    try:
-                        res_json['snippet']['detectLanguage'] = detect(res_json['snippet']['title'] + res_json['snippet']['description'])
-                    except Exception:
-                        pass
-                return res_json
+                if response is not None and isinstance(response['items'], list) and len(response['items']) > 0:
+                    res_json = response['items'][0]
+                    # remove the unnecessary part in thumbnail
+                    res_json['snippet']['thumbnails'] = res_json['snippet']['thumbnails']['default']['url']
+                    # use langdetect if defaultLanguage not available
+                    if 'defaultLanguage' not in res_json['snippet']:
+                        try:
+                            res_json['snippet']['detectLanguage'] = detect(res_json['snippet']['title'] + res_json['snippet']['description'])
+                        except Exception:
+                            pass
+                    return res_json
             except Exception as e:
                 logging.error('--- Exception in metadata crawler:', str(e))
                 time.sleep((2 ** i) + random.random())
@@ -174,6 +177,8 @@ class Crawler(BaseCrawler):
                 response = self.opener.open(url, self.post_data, timeout=2**i)
                 content = response.read().decode('utf-8')
                 break
+            except OSError as e:
+                logging.error('--- Socket timed out in historical data crawler:', str(e))
             except Exception as e:
                 logging.error('--- Exception in historical data crawler:', str(e))
                 continue
@@ -191,14 +196,15 @@ class Crawler(BaseCrawler):
         try:
             response = self.client.search().list(relatedToVideoId=video_id,  part='snippet', type='video',
                                                  order='relevance', maxResults=50, pageToken=page_token).execute()
-            for res_json in response['items']:
-                # extract relevant video ids
-                relevant_videos.append(res_json['id']['videoId'])
+            if response is not None and isinstance(response['items'], list) and len(response['items']) > 0:
+                for res_json in response['items']:
+                    # extract relevant video ids
+                    relevant_videos.append(res_json['id']['videoId'])
 
-            # recursively request next page
-            if 'nextPageToken' in response:
-                next_page_token = response['nextPageToken']
-                relevant_videos.extend(self.search_relevant_videos(video_id, page_token=next_page_token))
+                # recursively request next page
+                if 'nextPageToken' in response:
+                    next_page_token = response['nextPageToken']
+                    relevant_videos.extend(self.search_relevant_videos(video_id, page_token=next_page_token))
         except Exception as e:
             logging.error('--- Relevant videos crawler failed on video {0}: {1}'.format(video_id, str(e)))
         return relevant_videos
