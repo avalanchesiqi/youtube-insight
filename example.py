@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     input_path = args.input
     output_path = args.output
-    logging.basicConfig(filename='./youtube_crawler.log', level=logging.WARNING)
+    logging.basicConfig(filename='./youtube_insight_crawler.log', level=logging.WARNING)
 
     if not os.path.exists(input_path):
         print('>>> Input file does not exist!')
