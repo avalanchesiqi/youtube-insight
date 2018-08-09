@@ -5,7 +5,6 @@ It crawls metadata from YouTube V3 API and historical data from web request.
 """
 
 import time, random, logging
-from langdetect import detect
 
 from youtube_insight import BaseCrawler
 
@@ -149,12 +148,17 @@ class Crawler(BaseCrawler):
                     res_json = response['items'][0]
                     # remove the unnecessary part in thumbnail
                     res_json['snippet']['thumbnails'] = res_json['snippet']['thumbnails']['default']['url']
-                    # use langdetect if defaultLanguage not available
+                    # use googletrans if defaultLanguage not available
                     if 'defaultLanguage' not in res_json['snippet']:
                         try:
-                            res_json['snippet']['detectLanguage'] = detect(res_json['snippet']['title'] + res_json['snippet']['description'])
+                            res_json['snippet']['detectLanguage'] = self.translator.detect(
+                                res_json['snippet']['title'] + res_json['snippet']['description']).lang
                         except Exception:
-                            pass
+                            # Google translator throws an exception after many detections, reset the translator
+                            time.sleep(2 * random.random())
+                            self.update_translator()
+                            res_json['snippet']['detectLanguage'] = self.translator.detect(
+                                res_json['snippet']['title'] + res_json['snippet']['description']).lang
                     return res_json
             except Exception as e:
                 logging.error('--- Exception in metadata crawler:', str(e))
@@ -172,7 +176,7 @@ class Crawler(BaseCrawler):
 
         # exponential back-off
         for i in range(1, 4):
-            time.sleep(random.uniform(0.1, 1))
+            time.sleep(0.1 + random.random())
             try:
                 response = self.opener.open(url, self.post_data, timeout=2**i)
                 content = response.read().decode('utf-8')
