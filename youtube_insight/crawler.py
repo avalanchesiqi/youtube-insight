@@ -151,14 +151,20 @@ class Crawler(BaseCrawler):
                     # use googletrans if defaultLanguage not available
                     if 'defaultLanguage' not in res_json['snippet']:
                         try:
+                            # remove emoji as googeltrans cannot handle emoji
                             res_json['snippet']['detectLanguage'] = self.translator.detect(
-                                res_json['snippet']['title'] + res_json['snippet']['description']).lang
+                                self._remove_emoji(
+                                    res_json['snippet']['title'] + res_json['snippet']['description'])).lang
                         except Exception:
                             # Google translator throws an exception after many detections, reset the translator
                             time.sleep(2 * random.random())
                             self.update_translator()
                             res_json['snippet']['detectLanguage'] = self.translator.detect(
-                                res_json['snippet']['title'] + res_json['snippet']['description']).lang
+                                self._remove_emoji(
+                                    res_json['snippet']['title'] + res_json['snippet']['description'])).lang
+                    # remove duplicate relevant topic ids
+                    if 'topicDetails' in res_json and 'relevantTopicIds' in res_json['topicDetails']:
+                        res_json['topicDetails']['relevantTopicIds'] = list(set(res_json['topicDetails']['relevantTopicIds']))
                     return res_json
             except Exception as e:
                 logging.error('--- Exception in metadata crawler:', str(e))
