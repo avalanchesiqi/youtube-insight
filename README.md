@@ -137,3 +137,5 @@ If not, we use [googletrans 2.3.0](https://pypi.org/project/googletrans/) to det
 #### 2018-08-09
 1. Remove the `force` field in argparse, now you can append to existing output file without worrying about rewriting.
 2. Change the languageDetector from [langdetect 1.0.7](https://pypi.org/project/langdetect/) to [googletrans 2.3.0](https://pypi.org/project/googletrans/).
+
+[![DOI](https://zenodo.org/badge/116964336.svg)](https://zenodo.org/badge/latestdoi/116964336)
