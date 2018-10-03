@@ -7,7 +7,7 @@ It sets up a client to interact with API and an opener to send request from.
 import time, datetime, random, json, re, urllib
 from http.cookiejar import CookieJar
 from googleapiclient import discovery
-from googletrans import Translator
+# from googletrans import Translator
 from xml.etree import ElementTree
 
 # YouTube API service and version
@@ -24,7 +24,7 @@ class BaseCrawler(object):
         self.opener = urllib.request.build_opener()
         self.cookie, self.session_token = self._get_cookie_and_sessiontoken()
         self.post_data = self.get_post_data(self.session_token)
-        self.translator = Translator()
+        # self.translator = Translator()
 
     # == == == == == == == == methods to construct data api client == == == == == == == == #
     def set_key(self, key):
@@ -44,10 +44,10 @@ class BaseCrawler(object):
         """
         self.fields = fields
 
-    def update_translator(self):
-        """ Update Google translator.
-        """
-        self.translator = Translator()
+    # def update_translator(self):
+    #     """ Update Google translator.
+    #     """
+    #     self.translator = Translator()
 
     # == == == == == == == == methods to construct historical data opener == == == == == == == == #
     @staticmethod

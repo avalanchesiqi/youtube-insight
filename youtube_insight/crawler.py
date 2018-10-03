@@ -148,21 +148,31 @@ class Crawler(BaseCrawler):
                     res_json = response['items'][0]
                     # remove the unnecessary part in thumbnail
                     res_json['snippet']['thumbnails'] = res_json['snippet']['thumbnails']['default']['url']
-                    # use googletrans if defaultLanguage not available
-                    if 'defaultLanguage' not in res_json['snippet']:
-                        try:
-                            # remove emoji as googeltrans cannot handle emoji
-                            res_json['snippet']['detectLanguage'] = self.translator.detect(
-                                self._remove_emoji(
-                                    res_json['snippet']['title'] + res_json['snippet']['description'])).lang
-                        except Exception:
-                            # Google translator throws an exception after many detections, reset the translator
-                            time.sleep(2 * random.random())
-                            self.update_translator()
-                            res_json['snippet']['detectLanguage'] = self.translator.detect(
-                                self._remove_emoji(
-                                    res_json['snippet']['title'] + res_json['snippet']['description'])).lang
+
+                    # **********************************************
+                    # Change log: remove google translate field
+                    # There are some issues with google translate python api.
+                    # A fix is posted on Github, however some users report a 403 error returned by Google.
+                    # Therefore I disable the function as of now.
+                    # See more at: https://github.com/ssut/py-googletrans/issues/77
+                    # **********************************************
+
+                    # # use googletrans if defaultLanguage not available
+                    # if 'defaultLanguage' not in res_json['snippet']:
+                    #     try:
+                    #         # remove emoji as googeltrans cannot handle emoji
+                    #         res_json['snippet']['detectLanguage'] = self.translator.detect(
+                    #             self._remove_emoji(
+                    #                 res_json['snippet']['title'] + res_json['snippet']['description'])).lang
+                    #     except Exception:
+                    #         # Google translator throws an exception after many detections, reset the translator
+                    #         time.sleep(2 * random.random())
+                    #         self.update_translator()
+                    #         res_json['snippet']['detectLanguage'] = self.translator.detect(
+                    #             self._remove_emoji(
+                    #                 res_json['snippet']['title'] + res_json['snippet']['description'])).lang
                     # remove duplicate relevant topic ids
+
                     if 'topicDetails' in res_json and 'relevantTopicIds' in res_json['topicDetails']:
                         res_json['topicDetails']['relevantTopicIds'] = list(set(res_json['topicDetails']['relevantTopicIds']))
                     return res_json
