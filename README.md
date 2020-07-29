@@ -4,6 +4,9 @@
 YouTube-insight is a tool to crawl video metadata and historical data for YouTube videos, and first used to construct datasets in the following paper,
 > [Siqi Wu](https://avalanchesiqi.github.io/), [Marian-Andrei Rizoiu](http://www.rizoiu.eu/), and [Lexing Xie](http://users.cecs.anu.edu.au/~xlx/). Beyond Views: Measuring and Predicting Engagement in Online Videos. *AAAI International Conference on Weblogs and Social Media (ICWSM)*, 2018. \[ [paper](https://avalanchesiqi.github.io/files/icwsm2018engagement.pdf) | [code](https://github.com/avalanchesiqi/youtube-engagement) | [data](https://drive.google.com/drive/folders/1wZwDIR18IHPPTiH1C0dyBbGPR-3MktI7?usp=sharing) | [slides](https://avalanchesiqi.github.io/files/icwsm2018slides.pdf) \]
 
+## Note
+This package is no longer working since YouTube deprecated the insight endpoint around Nov, 2018.
+
 ## Installation
 Install from source, run
 ```bash
