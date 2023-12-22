@@ -2,7 +2,7 @@
 
 ## An integrated YouTube data crawler
 YouTube-insight is a tool to crawl video metadata and historical data for YouTube videos, and first used to construct datasets in the following paper,
-> [Siqi Wu](https://avalanchesiqi.github.io/), [Marian-Andrei Rizoiu](http://www.rizoiu.eu/), and [Lexing Xie](http://users.cecs.anu.edu.au/~xlx/). Beyond Views: Measuring and Predicting Engagement in Online Videos. *AAAI International Conference on Weblogs and Social Media (ICWSM)*, 2018. \[ [paper](https://avalanchesiqi.github.io/files/icwsm2018engagement.pdf) | [code](https://github.com/avalanchesiqi/youtube-engagement) | [data](https://drive.google.com/drive/folders/1wZwDIR18IHPPTiH1C0dyBbGPR-3MktI7?usp=sharing) | [slides](https://avalanchesiqi.github.io/files/icwsm2018slides.pdf) \]
+> [Siqi Wu](https://avalanchesiqi.github.io/), [Marian-Andrei Rizoiu](http://www.rizoiu.eu/), and [Lexing Xie](http://users.cecs.anu.edu.au/~xlx/). Beyond Views: Measuring and Predicting Engagement in Online Videos. *AAAI International Conference on Weblogs and Social Media (ICWSM)*, 2018. \[ [paper](https://avalanchesiqi.github.io/files/icwsm2018engagement.pdf) | [code](https://github.com/avalanchesiqi/youtube-engagement) | [data](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/L3UWZT) | [slides](https://avalanchesiqi.github.io/files/icwsm2018slides.pdf) \]
 
 ## Note
 This package is no longer working since YouTube deprecated the insight endpoint around Nov, 2018.
@@ -130,6 +130,8 @@ Each line is a YouTube video in `json` format, an example is shown below, in whi
    "relevantVideos": ["nxlcbPh6uns", "PT2_F-1esPk", "mNT_WyRcVJU", "EW1dLymlm3s", "B56IBLlZyuk", "KEI4qSrkPAs", "sg34LyfYobo", "6ZKbEGzvub0", "6fBZBntjEOA", "5GL9JoH4Sws", "7fKHkT1_VyI", "Gb0zSG0kwZ8", "1Vn1BXfsd4Q", "bMpFmHSgC4Q", "h-HbNph19k0", "ES9zCvZsb40", "dUBW_Y9-UAU", "P7WO0I3qKzw", "dHcfpzTxJi8", "1y6smkh6c-0", "nYh-n7EOtMA", "3v5HZTwFBCs", "YBbUQ8NBnok", "EbhsbLeq-xg", "42CRTZ_GHV8", "6CnP8ghhZPQ", "l06PgBJWZqk", "PkWotCFXQc0", "Du5-zXZyWaE", "4VG9WDSaWN0", "nGomTkNhEW0", "ikz6Iwo4lJM", "gJpAR_YwrFU", "_4cGX4KogyY", "Su92XV3J-oA", "DyIIe0t_RwY", "JesZWS0att8", "4LwRqByQ5h4", "nMIoAJRgYVE", "7_tSinRVwU8", "ejkP7y-VtqE", "HXeYRs_zR6w", "QTXqOdaVwQ4", "TW-pxuxjd3c"]
 }
 ```
+
+The unit for the `dailyWatch` field is minute.
 
 ### defaultLanguage/detectLanguage field
 Some videos have `defaultLanguage` returned by YouTube API, but some don't.
